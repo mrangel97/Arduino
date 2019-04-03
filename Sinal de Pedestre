@@ -1,3 +1,5 @@
+//Esse programa começa com o led verde ligado por alguns segundos fazendo com que depois o led vermelho pisque 3 vezes
+//Depois disso,o led vermelho permanece ligado por uns segundos e em seguida o led verde pisca 3 vezes.E com isso segue o loop
 void setup() {
   pinMode(10,OUTPUT); //LED VERDE
   pinMode(11,OUTPUT); // LED VERMELHO
