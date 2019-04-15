@@ -13,7 +13,8 @@ void loop() {
   delay(5000);
   digitalWrite(10,LOW); // DESLIGAR LED VERDE
   delay(1000);
-  for(j=0;j<3;j++){  // PISCAR LED VERMELHO
+  for(j=0;j<3;j++) // PISCAR LED VERMELHO
+  {                 
     digitalWrite(11,HIGH);
     delay(1000);
     digitalWrite(11,LOW); 
@@ -24,7 +25,8 @@ void loop() {
   delay(5000);
   digitalWrite(11,LOW); //DESLIGAR LED VERMELHO 
   delay(1000);
-  for(j=0;j<3;j++){  // PISCAR LED VERDE
+  for(j=0;j<3;j++) //PISCAR LED VERDE
+  {
     digitalWrite(10,HIGH);
     delay(1000);
     digitalWrite(10,LOW);
