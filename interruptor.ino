@@ -8,8 +8,10 @@ void setup() {
 
 void loop() {
   pressao=digitalRead(3);
-  if(pressao==HIGH){
-     switch(ligado){
+  if(pressao==HIGH)
+  {
+     switch(ligado)
+     {
         case 0:
           digitalWrite(2,HIGH);
           ligado=1;
