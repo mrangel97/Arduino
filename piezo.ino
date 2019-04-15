@@ -9,11 +9,14 @@ void setup(){
 
 void loop(){
 int val= analogRead(sensor);
-    if (val >= limiarLimite){
+    if (val >= limiarLimite)
+    {
         digitalWrite(led, HIGH);
         delay(1000);
         digitalWrite(led, LOW);
     }
     else
+    {
        digitalWrite(led, LOW);
+    }
 }
