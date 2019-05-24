@@ -6,9 +6,9 @@
 #include <DHT.h>
 
 // Definicao do pino do sensor 
-#define DHTPIN 7
+#define DHTPIN 2
 // Tipo de sensor
-#define DHTTYPE 22
+#define DHTTYPE DHT22
 
 // Definicao de pinos interface SPI
 #define OLED_SDA   9
@@ -38,17 +38,17 @@ void setup()
 
 void loop() 
 {
-  float umidade = dht.readUmidity(); // ler umidade
+  float umidade = dht.readHumidity(); // ler umidade
   float temperatura = dht.readTemperature(); // ler temperatura
 
   display.setTextSize(2); //tamanho do texto
   display.setTextColor(WHITE);
-  display.println("Umidade: "); // mostra a umidade
-  display.println(umidade);
-  display.println(" %");
-  display.println("Temperatura: "); // mostra a temperatura
-  display.println(temperatura);
-  display.println(" *C");
+  display.print("Umidade: "); // mostra a umidade
+  display.print(umidade);
+  display.print(" %");
+  display.print("Temperatura: "); // mostra a temperatura
+  display.print(temperatura);
+  display.print(" *C");
   display.display(); //executa o texto no display
 
   int val = analogRead(piezo);
