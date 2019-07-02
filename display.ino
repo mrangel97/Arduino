@@ -24,6 +24,35 @@ DHT dht(DHTPIN, DHTTYPE);
 const int piezo = 0; // A0
 const int limiarLimite = 50; // Batimento
 
+void sensorUmidTemp()
+{
+    float umidade = dht.readHumidity(); // ler umidade
+    float temperatura = dht.readTemperature(); // ler temperatura
+
+    display.setCursor(10,10);
+    display.setTextColor(WHITE);
+    display.setTextSize(1); //tamanho do texto
+    display.print("Umidade: "); // mostra a umidade
+    display.print(umidade);
+    display.println(" %");
+    display.print("Temperatura: "); // mostra a temperatura
+    display.print(temperatura);
+    display.println(" *C");
+    display.display(); //executa o texto no display
+}
+
+void piezoToc()
+{
+        display.clearDisplay();
+        display.setCursor(10,10);
+        display.setTextColor(WHITE);
+        display.setTextSize(2);
+        display.print("TOC!TOC!");
+        display.display(); 
+}
+
+
+
 void setup()   
 {
   Serial.begin(9600);
@@ -35,27 +64,13 @@ void setup()
 
 void loop() 
 {
-  float umidade = dht.readHumidity(); // ler umidade
-  float temperatura = dht.readTemperature(); // ler temperatura
-
-  display.setTextSize(1); //tamanho do texto
-  display.setTextColor(WHITE);
-  display.print("Umidade: "); // mostra a umidade
-  display.print(umidade);
-  display.println(" %");
-  display.print("Temperatura: "); // mostra a temperatura
-  display.print(temperatura);
-  display.println(" *C");
-  display.display(); //executa o texto no display
-  
+  sensorUmidTemp();
   int val = analogRead(piezo);
   if (val >= limiarLimite)
   {
-    display.clearDisplay();
-    display.setCursor(10,10);
-    display.setTextSize(2);
-    display.println("TOC!TOC!");
-    display.display();
-    delay(5000);
+     piezoToc();
+     display.clearDisplay();
+     delay(1000);
+     return sensorUmidTemp();
   }
 }
