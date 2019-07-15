@@ -59,5 +59,6 @@ void loop() {
   }
   else if(pressao == 0){
     display.clearDisplay();
+    display.display();
   }
 }
