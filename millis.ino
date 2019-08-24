@@ -1,5 +1,3 @@
-// Nesse código,através da função millis,o display será ligado com o push button sendo pressionado por 1 segundo ou mais que isso
-// E o mesmo para desligar o display
 #include <SPI.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
@@ -25,9 +23,6 @@ Adafruit_SSD1306 display(OLED_SDA, OLED_SCK, OLED_DC, OLED_RESET, OLED_CS);
 // Criacao do objeto para comunicacao com o sensor
 DHT dht(DHTPIN, DHTTYPE);
 
-unsigned long time_atual = 0;
-unsigned long time_ult = 0;
-
 void umid_temp(){
   float umidade = dht.readHumidity();
   float temperatura = dht.readTemperature();
@@ -47,32 +42,36 @@ void umid_temp(){
   display.display();
 }
 
+unsigned long tempo_ini = 0;
+int bot_velho;
+int tela;
+
 void setup() {
   Serial.begin(9600);
   display.begin(SSD1306_SWITCHCAPVCC);
   dht.begin();
   display.clearDisplay();
   pinMode(BUTTON , INPUT);
+  bot_velho = digitalRead(BUTTON);
+  tela = 0;
 }
 
 void loop() {
-  int pressao = digitalRead(BUTTON);
-  time_atual = millis();
-  if(pressao == 0){
-     time_ult = time_atual;
+  int bot_novo = digitalRead(BUTTON);
+  if(bot_velho != bot_novo){
+    if(bot_novo == HIGH){
+      tempo_ini = millis();  
+    }
+    bot_velho = bot_novo;
   }
-  if((pressao == 1) && (time_atual - time_ult >= 1000)){
-       umid_temp();
-       time_ult = 0;
-       time_atual = 0;
-       pressao = digitalRead(BUTTON);
-       time_atual = millis();
-       if(pressao == 0){
-          umid_temp();
-       }
-       if((pressao == 1) && (time_atual - time_ult >= 1000)){
-           display.clearDisplay();
-           display.display();
-       }
-  }  
+  if((bot_velho == HIGH) && (millis() - tempo_ini >= 1000)){
+    tela = !tela;
+  }
+  if(tela){
+    umid_temp();
+  }
+  else{
+    display.clearDisplay();
+    display.display();
+  }
 }
