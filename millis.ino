@@ -23,6 +23,10 @@ Adafruit_SSD1306 display(OLED_SDA, OLED_SCK, OLED_DC, OLED_RESET, OLED_CS);
 // Criacao do objeto para comunicacao com o sensor
 DHT dht(DHTPIN, DHTTYPE);
 
+unsigned long tempo_ini = 0;
+int tela;
+int bot_velho = 0;
+
 void umid_temp(){
   float umidade = dht.readHumidity();
   float temperatura = dht.readTemperature();
@@ -41,10 +45,15 @@ void umid_temp(){
 
   display.display();
 }
-
-unsigned long tempo_ini = 0;
-int bot_velho;
-int tela;
+void lerBotTemp(){
+    int bot_novo = digitalRead(BUTTON); //ler botao atual
+      if(bot_velho != bot_novo){ // se o anterior for o contrario do atual
+        if(bot_novo == HIGH){  //pressionar botao
+          tempo_ini = millis(); // contar tempo
+        }
+        bot_velho = bot_novo;
+      }
+}
 
 void setup() {
   Serial.begin(9600);
@@ -52,26 +61,22 @@ void setup() {
   dht.begin();
   display.clearDisplay();
   pinMode(BUTTON , INPUT);
-  bot_velho = digitalRead(BUTTON);
   tela = 0;
 }
 
 void loop() {
-  int bot_novo = digitalRead(BUTTON);
-  if(bot_velho != bot_novo){
-    if(bot_novo == HIGH){
-      tempo_ini = millis();  
-    }
-    bot_velho = bot_novo;
-  }
+  lerBotTemp();
   if((bot_velho == HIGH) && (millis() - tempo_ini >= 1000)){
-    tela = !tela;
-  }
-  if(tela){
-    umid_temp();
-  }
-  else{
-    display.clearDisplay();
-    display.display();
-  }
+     tela = !tela;
+     umid_temp();
+     if(bot_velho == LOW){
+        tempo_ini = 0;
+        lerBotTemp();
+        if((bot_velho == HIGH) && (millis() - tempo_ini >= 1000)){
+            tela = 0;
+            display.clearDisplay();
+            display.display();
+        }
+     }
+  }     
 }
