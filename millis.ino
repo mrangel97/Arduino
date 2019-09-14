@@ -23,8 +23,9 @@ Adafruit_SSD1306 display(OLED_SDA, OLED_SCK, OLED_DC, OLED_RESET, OLED_CS);
 // Criacao do objeto para comunicacao com o sensor
 DHT dht(DHTPIN, DHTTYPE);
 
-unsigned long tempo_ini = 0;
-int tela;
+unsigned long ultimo_tempo = 0;
+unsigned long tempo_atual = 0;
+bool tela = false;
 int bot_velho = 0;
 
 void umid_temp(){
@@ -49,7 +50,7 @@ void lerBotTemp(){
     int bot_novo = digitalRead(BUTTON); //ler botao atual
       if(bot_velho != bot_novo){ // se o anterior for o contrario do atual
         if(bot_novo == HIGH){  //pressionar botao
-          tempo_ini = millis(); // contar tempo
+          tempo_atual = millis(); // contar tempo
         }
         bot_velho = bot_novo;
       }
@@ -61,22 +62,19 @@ void setup() {
   dht.begin();
   display.clearDisplay();
   pinMode(BUTTON , INPUT);
-  tela = 0;
 }
 
 void loop() {
   lerBotTemp();
-  if((bot_velho == HIGH) && (millis() - tempo_ini >= 1000)){
+  if((bot_velho == HIGH) && (tempo_atual - ultimo_tempo >= 1000)){
      tela = !tela;
+  }
+  if(tela){
      umid_temp();
-     if(bot_velho == LOW){
-        tempo_ini = 0;
-        lerBotTemp();
-        if((bot_velho == HIGH) && (millis() - tempo_ini >= 1000)){
-            tela = 0;
-            display.clearDisplay();
-            display.display();
-        }
-     }
-  }     
+  }
+  else{
+       display.clearDisplay();
+       display.display();
+  }
+  ultimo_tempo = tempo_atual;     
 }
