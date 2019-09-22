@@ -66,8 +66,12 @@ void setup() {
 
 void loop() {
   lerBotTemp();
+  if((bot_velho == HIGH) && (tempo_atual - ultimo_tempo < 1000)){
+      display.clearDisplay();
+      display.display();
+  }
   if((bot_velho == HIGH) && (tempo_atual - ultimo_tempo >= 1000)){
-     tela = !tela;
+       tela = !tela;
   }
   if(tela){
      umid_temp();
