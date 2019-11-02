@@ -2,9 +2,11 @@
 
 unsigned long ultimo_tempo = 0;
 unsigned long tempo_atual = 0;
-int estado = 0;
+int estadoLed = 0;
 const int LED = 13;
 const int BUTTON = 3;
+
+
 
 void setup() {
   pinMode(LED, OUTPUT);
@@ -12,21 +14,20 @@ void setup() {
 }
 
 void loop() {
-   int bot = digitalRead(BUTTON);
-   tempo_atual = millis();
-   if(bot == LOW) {
+   int pressionado = digitalRead(BUTTON);
+   if(pressionado == LOW) {
      ultimo_tempo = tempo_atual;
-     digitalWrite(LED, LOW);
    }
-   if ((bot == HIGH) && (tempo_atual - ultimo_tempo >= 1000)){
-      estado = !estado;
+   tempo_atual = millis();
+   if ((pressionado == HIGH) && (tempo_atual - ultimo_tempo >= 1000)){
+      estadoLed = !estadoLed;
       ultimo_tempo = tempo_atual;
    }
 
-   if(estado == 1){
+   if(estadoLed == 1){
       digitalWrite(LED, HIGH);
    }
-   else if(estado == 0){
+   else if(estadoLed == 0){
       digitalWrite(LED, LOW);
    }
 }
