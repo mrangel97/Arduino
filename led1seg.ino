@@ -15,19 +15,20 @@ void setup() {
 
 void loop() {
    int pressionado = digitalRead(BUTTON);
-   if(pressionado == LOW) {
-     ultimo_tempo = tempo_atual;
-   }
    tempo_atual = millis();
-   if ((pressionado == HIGH) && (tempo_atual - ultimo_tempo >= 1000)){
-      estadoLed = !estadoLed;
-      ultimo_tempo = tempo_atual;
+   if(pressionado) {
+       if (tempo_atual - ultimo_tempo >= 1000){
+         estadoLed = !estadoLed;
+         ultimo_tempo = tempo_atual;
+       }
+       if(estadoLed == 1){
+         digitalWrite(LED, HIGH);
+       }
+       else if(estadoLed == 0){
+         digitalWrite(LED, LOW);
+       }
    }
-
-   if(estadoLed == 1){
-      digitalWrite(LED, HIGH);
-   }
-   else if(estadoLed == 0){
-      digitalWrite(LED, LOW);
+   else if(!pressionado){
+        ultimo_tempo = tempo_atual;
    }
 }
