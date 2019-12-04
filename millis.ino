@@ -25,8 +25,8 @@ DHT dht(DHTPIN, DHTTYPE);
 
 unsigned long ultimo_tempo = 0;
 unsigned long tempo_atual = 0;
-bool tela = false;
-int bot_velho = 0;
+int estadoTela = 0;
+const int BUTTON = 3;
 
 void umid_temp(){
   float umidade = dht.readHumidity();
@@ -46,15 +46,6 @@ void umid_temp(){
 
   display.display();
 }
-void lerBotTemp(){
-    int bot_novo = digitalRead(BUTTON); //ler botao atual
-      if(bot_velho != bot_novo){ // se o anterior for o contrario do atual
-        if(bot_novo == HIGH){  //pressionar botao
-          tempo_atual = millis(); // contar tempo
-        }
-        bot_velho = bot_novo;
-      }
-}
 
 void setup() {
   Serial.begin(9600);
@@ -65,20 +56,20 @@ void setup() {
 }
 
 void loop() {
-  lerBotTemp();
-  if((bot_velho == HIGH) && (tempo_atual - ultimo_tempo < 1000)){
-      display.clearDisplay();
-      display.display();
-  }
-  if((bot_velho == HIGH) && (tempo_atual - ultimo_tempo >= 1000)){
-       tela = !tela;
-  }
-  if(tela){
-     umid_temp();
-  }
-  else{
-       display.clearDisplay();
-       display.display();
-  }
-  ultimo_tempo = tempo_atual;     
+  int pressionado = digitalRead(BUTTON);
+  tempo_atual = millis();
+  if(pressionado){
+       if(tempo_atual - ultimo_tempo >= 1000)){
+          estadoTela = !estadoTela;
+          ultimo_tempo = tempo_atual;
+       }
+       if(estadoTela == 1){
+          umid_temp();
+       }
+       else if(estadoTela == 0){
+          display.clearDisplay();
+          display.display();
+       }
+   }
+   ultimo_tempo = tempo_atual;
 }
