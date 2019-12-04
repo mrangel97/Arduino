@@ -59,7 +59,7 @@ void loop() {
   int pressionado = digitalRead(BUTTON);
   tempo_atual = millis();
   if(pressionado){
-       if(tempo_atual - ultimo_tempo >= 1000)){
+       if(tempo_atual - ultimo_tempo >= 1000){
           estadoTela = !estadoTela;
           ultimo_tempo = tempo_atual;
        }
