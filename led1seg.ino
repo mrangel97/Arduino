@@ -7,7 +7,6 @@ const int LED = 13;
 const int BUTTON = 3;
 
 
-
 void setup() {
   pinMode(LED, OUTPUT);
   pinMode(BUTTON , INPUT);
@@ -18,17 +17,20 @@ void loop() {
    tempo_atual = millis();
    if(pressionado) {
        if (tempo_atual - ultimo_tempo >= 1000){
-         estadoLed = !estadoLed;
-         ultimo_tempo = tempo_atual;
+           estadoLed = !estadoLed;
+           ultimo_tempo = tempo_atual;
+       }
+       else if(tempo_atual - ultimo_tempo >= 2000){
+           digitalWrite(LED, LOW);
        }
        if(estadoLed == 1){
-         digitalWrite(LED, HIGH);
+          digitalWrite(LED, HIGH);
        }
        else if(estadoLed == 0){
-         digitalWrite(LED, LOW);
+          digitalWrite(LED, LOW);
        }
    }
    else if(!pressionado){
-        ultimo_tempo = tempo_atual;
+         ultimo_tempo = tempo_atual;
    }
 }
